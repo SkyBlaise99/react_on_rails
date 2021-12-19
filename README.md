@@ -6,11 +6,11 @@ Guide used: [link](https://zayne.io/articles/how-to-build-a-crud-app-with-ruby-o
 
 Open terminal to run `run.sh`
 
-## Create new Rails App with React + PostgreSQL
+## Creating new Rails App with React + PostgreSQL
 
 `rails new react_on_rails --webpack=react --database=postgresql`
 
-## Create database
+## Creating database
 
 `cd react_on_rails`
 
@@ -38,3 +38,17 @@ Use `rails c` to open console:
     * `task.save`
 * If encounter `uninitialized constant Task (NameError)`, input `reload!`
 * To exit: `quit`
+
+## Building JSON API
+
+Add `gem 'fast_jsonapi'` to `Gemfile`
+
+`bundle install`
+
+`rails g serializer Task description is_done due_date`
+
+`task = Task.first`
+
+`TaskSerializer.new(task).serialized_json`
+
+`TaskSerializer.new(task).as_json`
