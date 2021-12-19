@@ -52,3 +52,7 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 `TaskSerializer.new(task).serialized_json`
 
 `TaskSerializer.new(task).as_json`
+
+## Making controller
+
+`rails g controller pages index`
