@@ -15,3 +15,26 @@ Open terminal to run `run.sh`
 `cd react_on_rails`
 
 `rails db:create`
+
+## Making data model
+
+``` java
+public class Task {
+    String description;
+    boolean is_done;
+    DateTime due_date;
+}
+```
+
+`rails g model Task description:string is_done:boolean due_date:datetime`
+
+`rails db:migrate`
+
+Use `rails c` to open console:
+* Add dummy data
+    * `task = Task.new( description: "CVWO Assignment", is_done: false, due_date: "2022-01-25 23:59" )`
+    * `task.save`
+    * `task = Task.new( description: "Dummy Assignment", is_done: true, due_date: "23:59" )`
+    * `task.save`
+* If encounter `uninitialized constant Task (NameError)`, input `reload!`
+* To exit: `quit`
