@@ -56,3 +56,7 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 ## Making controller
 
 `rails g controller pages index`
+
+## Installing react-router-dom
+
+`yarn add react-router-dom`
