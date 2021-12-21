@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+function filterTaskList(taskList, query) {
+  if (!query) {
+    return taskList;
+  }
+
+  return taskList.filter((task) =>
+    task.attributes.description
+      .toLowerCase()
+      .includes(query)
+  );
+};
+
 const Tasks = () => {
   const [tasks, setTasks] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() =>
     axios.get('/api/v1/tasks')
@@ -15,7 +28,7 @@ const Tasks = () => {
     , []
   )
 
-  const taskList = tasks
+  const filteredTaskList = filterTaskList(tasks, searchQuery)
     .map((task, index) =>
       (<li key={index} >{task.attributes.description}</li>)
     );
@@ -27,12 +40,18 @@ const Tasks = () => {
       </div>
 
       <div className="search">
-        Search bar goes here
+        <input
+          type="text"
+          id="search"
+          placeholder="Type something to search for your task :)"
+          value={searchQuery}
+          onInput={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       <div className="list">
         <p>List of Tasks goes here ...</p>
-        <ul>{taskList}</ul>
+        <ul>{filteredTaskList}</ul>
       </div>
     </div>
   )
