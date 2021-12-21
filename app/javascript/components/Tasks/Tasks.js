@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 
 function filterTaskList(taskList, query) {
@@ -29,9 +30,11 @@ const Tasks = () => {
   )
 
   const filteredTaskList = filterTaskList(tasks, searchQuery)
-    .map((task, index) =>
-      (<li key={index} >{task.attributes.description}</li>)
-    );
+    .map((task, index) => (
+      <li key={index} >
+        <Link to={"/" + task.id}>{task.attributes.description}</Link>
+      </li>
+    ));
 
   return (
     <div className="home">
