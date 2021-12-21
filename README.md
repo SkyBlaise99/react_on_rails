@@ -60,3 +60,7 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 ## Installing react-router-dom
 
 `yarn add react-router-dom`
+
+## Installing axios
+
+`yarn add axios`
