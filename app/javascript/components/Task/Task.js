@@ -2,7 +2,15 @@ import React from 'react'
 
 const Task = () => {
   return (
-    <h1>Details of Task ID ?</h1>
+    <div className="home">
+      <div className="header">
+        <h1>Details of Task ID ?</h1>
+      </div>
+
+      <div className="details">
+        Details of Task goes here
+      </div>
+    </div>
   )
 }
 
