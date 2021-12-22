@@ -3,9 +3,7 @@ import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 
 function filterTaskList(taskList, query) {
-  if (!query) {
-    return taskList;
-  }
+  if (!query) return taskList;
 
   return taskList.filter((task) =>
     task.attributes.description
@@ -18,18 +16,13 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
 
-  useEffect(() =>
-    axios.get('/api/v1/tasks')
-      .then(resp => {
-        setTasks(resp.data.data)
-      })
-      .catch(data => {
-        debugger
-      })
-    , []
-  )
+  useEffect(() => {
+    axios.get('/api/v1/tasks/')
+      .then(resp => { setTasks(resp.data.data) })
+      .catch(data => { debugger })
+  }, [])
 
-  const filteredTaskList = filterTaskList(tasks, searchQuery)
+  const formattedTaskList = filterTaskList(tasks, searchQuery)
     .map((task, index) => (
       <li key={index} >
         <Link to={"/" + task.id}>{task.attributes.description}</Link>
@@ -54,7 +47,7 @@ const Tasks = () => {
 
       <div className="list">
         <p>List of Tasks goes here ...</p>
-        <ul>{filteredTaskList}</ul>
+        <ul>{formattedTaskList}</ul>
       </div>
     </div>
   )
