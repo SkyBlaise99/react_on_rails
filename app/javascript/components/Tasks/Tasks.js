@@ -26,6 +26,10 @@ const Tasks = () => {
     .map((task, index) => (
       <li key={index} >
         <Link to={"/" + task.id}>{task.attributes.description}</Link>
+        <b> | </b>
+        {task.attributes.is_done ? "done" : "not done"}
+        <b> | </b>
+        {task.attributes.due_date}
       </li>
     ));
 
