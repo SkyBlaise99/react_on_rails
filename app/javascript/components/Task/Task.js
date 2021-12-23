@@ -17,6 +17,13 @@ const Task = () => {
 
   if (task === null) return <h1>Loading ...</h1>
 
+  const deleteTask = (id) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      axios.delete('/api/v1/tasks/' + id)
+      setIsInvalidId(true)
+    }
+  }
+
   return (
     <div className="home">
       <div className="header">
@@ -31,10 +38,7 @@ const Task = () => {
         <p>Last edited on: {task.attributes.updated_at}</p>
       </div>
 
-      <button onClick={() => {
-        axios.delete('/api/v1/tasks/' + id)
-        setIsInvalidId(true)
-      }}>Delete</button>
+      <button onClick={() => deleteTask(id)}>Delete</button>
       <b> | </b>
       <Link to={"/"}>Back</Link>
     </div>

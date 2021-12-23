@@ -20,7 +20,14 @@ const Tasks = () => {
     axios.get('/api/v1/tasks/')
       .then(resp => { setTasks(resp.data.data) })
       .catch(data => { debugger })
-  }, [])
+  }, [setTasks])
+
+  const deleteTask = (id) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      axios.delete('/api/v1/tasks/' + id)
+      setTasks([])
+    }
+  }
 
   const formattedTaskList = filterTaskList(tasks, searchQuery)
     .map((task, index) => (
@@ -30,6 +37,8 @@ const Tasks = () => {
         {task.attributes.is_done ? "done" : "not done"}
         <b> | </b>
         {task.attributes.due_date}
+        <b> | </b>
+        <button onClick={() => deleteTask(task.id)}>Delete</button>
       </li>
     ));
 
