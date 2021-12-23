@@ -14,6 +14,7 @@ const Tasks = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [referesh, setReferesh] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [task, setTask] = useState(null)
 
   const fetchData = () => {
     axios.get('/api/v1/tasks/')
@@ -26,21 +27,38 @@ const Tasks = () => {
   useEffect(() => {
     fetchData()
     setReferesh(false)
-  }, [referesh])
+  }, [referesh, showModal])
 
-  const openModal = () => setShowModal(true)
-  const closeModal = () => setShowModal(false)
+  const openAddModal = () => {
+    setTask(null)
+    setShowModal(true)
+  }
+
+  const openEditModal = (task) => {
+    setTask(task)
+    setShowModal(true)
+  }
+
+  const closeModal = () => { setShowModal(false) }
 
   const addTask = () => {
-    axios.post('/api/v1/tasks/', {
-      description: document.getElementById("input_description").value || "Test task",
-      is_done: false,
-      due_date: document.getElementById("input_due_date").value || "23:59"
-    })
-      .then(() => {
-        closeModal()
-        setReferesh(true)
+    axios.post('/api/v1/tasks/',
+      {
+        description: document.getElementById("input_description").value || "Test task",
+        is_done: false,
+        due_date: document.getElementById("input_due_date").value || "23:59"
       })
+      .then(closeModal)
+  }
+
+  const editTask = () => {
+    axios.patch('/api/v1/tasks/' + task.id,
+      {
+        description: document.getElementById("input_description").value || task.attributes.description,
+        is_done: document.getElementById("input_is_done").checked,
+        due_date: document.getElementById("input_due_date").value || task.attributes.due_date
+      })
+      .then(closeModal)
   }
 
   const deleteTask = (id) => {
@@ -58,9 +76,51 @@ const Tasks = () => {
       <b> | </b>
       {task.attributes.due_date}
       <b> | </b>
+      <button onClick={() => openEditModal(task)}>Edit</button>
+      <b> | </b>
       <button onClick={() => deleteTask(task.id)}>Delete</button>
     </li>
   ));
+
+  const showTaskTemplate = task === null
+    ?
+    <>
+      <h2>Input Details of New Task</h2>
+      <p>
+        <label>Description: </label>
+        <input id="input_description" />
+        <br />
+
+        <label>Due date: </label>
+        <input id="input_due_date" />
+      </p>
+      <p>
+        <button onClick={addTask}>Submit</button>
+        <b> | </b>
+        <button onClick={closeModal}>Close</button>
+      </p>
+    </>
+    :
+    <>
+      <h2>Edit Details of Task ID {id}</h2>
+      <p>
+        <label>Description: </label>
+        <input id="input_description" defaultValue={task.attributes.description} />
+        <br />
+
+        <label>Is done: </label>
+        {checkbox}
+        <br />
+
+        <label>Due date: </label>
+        <input id="input_due_date" defaultValue={task.attributes.due_date} />
+      </p>
+      <p>
+        <button onClick={editTask}>Update</button>
+        <b> | </b>
+        <button onClick={closeModal}>Close</button>
+      </p>
+    </>
 
   return (
     <div className="home">
@@ -70,7 +130,7 @@ const Tasks = () => {
       </div>
 
       <div className="add_task">
-        <button onClick={openModal}>Add a new Task</button>
+        <button onClick={openAddModal}>Add a new Task</button>
       </div>
       <br />
 
@@ -88,24 +148,8 @@ const Tasks = () => {
         <ul>{formattedTaskList}</ul>
       </div>
 
-      <Modal
-        isOpen={showModal}
-        onRequestClose={closeModal}
-        ariaHideApp={false}
-      >
-        <h2>Input details of task</h2>
-
-        <label>Description: </label>
-        <input id="input_description" />
-        <br />
-
-        <label>Due date: </label>
-        <input id="input_due_date" />
-        <br /><br />
-
-        <button onClick={closeModal}>Close</button>
-        <b />
-        <button onClick={addTask}>Submit</button>
+      <Modal isOpen={showModal} onRequestClose={closeModal} ariaHideApp={false}>
+        {showTaskTemplate}
       </Modal>
     </div>
   )
