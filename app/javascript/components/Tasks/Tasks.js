@@ -3,13 +3,9 @@ import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 
 function filterTaskList(taskList, query) {
-  if (!query) return taskList;
-
-  return taskList.filter((task) =>
-    task.attributes.description
-      .toLowerCase()
-      .includes(query)
-  );
+  return query
+    ? taskList.filter((task) => task.attributes.description.toLowerCase().includes(query))
+    : taskList;
 }
 
 const Tasks = () => {
@@ -26,8 +22,8 @@ const Tasks = () => {
   useEffect(fetchData, [])
 
   useEffect(() => {
-    referesh = false
     fetchData()
+    setReferesh(false)
   }, [referesh])
 
   const deleteTask = (id) => {
@@ -52,21 +48,21 @@ const Tasks = () => {
   return (
     <div className="home">
       <div className="header">
-        <h1>Task Manager</h1>
+        <h1>Sora</h1>
+        <p>Your number 1 task manager</p>
       </div>
 
       <div className="search">
         <input
           type="text"
-          id="search"
-          placeholder="Type something to search for your task :)"
+          placeholder="Search for your task :)"
           value={searchQuery}
           onInput={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 
       <div className="list">
-        <p>List of Tasks goes here ...</p>
+        <p>List of Tasks</p>
         <ul>{formattedTaskList}</ul>
       </div>
     </div>
