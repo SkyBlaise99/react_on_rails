@@ -102,14 +102,16 @@ const Tasks = () => {
     </>
     :
     <>
-      <h2>Edit Details of Task ID {id}</h2>
+      <h2>Edit Details of Task ID {task.id}</h2>
       <p>
         <label>Description: </label>
         <input id="input_description" defaultValue={task.attributes.description} />
         <br />
 
         <label>Is done: </label>
-        {checkbox}
+        {task.attributes.is_done
+          ? <input type="checkbox" id="input_is_done" defaultChecked />
+          : <input type="checkbox" id="input_is_done" />}
         <br />
 
         <label>Due date: </label>
