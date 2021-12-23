@@ -9,8 +9,14 @@ module Api
       end
 
       def show
-        task = Task.find(params[:id])
-        render json: TaskSerializer.new(task).serialized_json
+        id = params[:id]
+        task = Task.find_by_id(id)
+
+        if task
+          render json: TaskSerializer.new(task).serialized_json
+        else
+          render json: { error: "ID '" + id + "' not found" }, status: 422
+        end
       end
 
       def create
