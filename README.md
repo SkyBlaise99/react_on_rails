@@ -64,3 +64,9 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 ## Installing axios
 
 `yarn add axios`
+
+## Installing react modal
+
+[link](https://github.com/reactjs/react-modal)
+
+`yarn add react-modal`
