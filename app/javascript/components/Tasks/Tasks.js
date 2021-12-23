@@ -28,11 +28,14 @@ const Tasks = () => {
     setReferesh(false)
   }, [referesh])
 
+  const openModal = () => setShowModal(true)
+  const closeModal = () => setShowModal(false)
+
   const addTask = () => {
     axios.post('/api/v1/tasks/', {
-      description: document.getElementById("input_description").value,
+      description: document.getElementById("input_description").value || "Test task",
       is_done: false,
-      due_date: document.getElementById("input_due_date").value
+      due_date: document.getElementById("input_due_date").value || "23:59"
     })
       .then(() => {
         closeModal()
@@ -58,9 +61,6 @@ const Tasks = () => {
       <button onClick={() => deleteTask(task.id)}>Delete</button>
     </li>
   ));
-
-  const openModal = () => setShowModal(true)
-  const closeModal = () => setShowModal(false)
 
   return (
     <div className="home">
