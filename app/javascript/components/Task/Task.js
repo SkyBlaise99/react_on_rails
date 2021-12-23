@@ -20,7 +20,7 @@ const Task = () => {
   const deleteTask = (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       axios.delete('/api/v1/tasks/' + id)
-      setIsInvalidId(true)
+        .then(() => setIsInvalidId(true))
     }
   }
 

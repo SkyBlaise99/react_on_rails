@@ -10,37 +10,44 @@ function filterTaskList(taskList, query) {
       .toLowerCase()
       .includes(query)
   );
-};
+}
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [referesh, setReferesh] = useState(false)
 
-  useEffect(() => {
+  const fetchData = () => {
     axios.get('/api/v1/tasks/')
       .then(resp => { setTasks(resp.data.data) })
       .catch(data => { debugger })
-  }, [setTasks])
+  }
+
+  useEffect(fetchData, [])
+
+  useEffect(() => {
+    referesh = false
+    fetchData()
+  }, [referesh])
 
   const deleteTask = (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       axios.delete('/api/v1/tasks/' + id)
-      setTasks([])
+        .then(() => setReferesh(true))
     }
   }
 
-  const formattedTaskList = filterTaskList(tasks, searchQuery)
-    .map((task, index) => (
-      <li key={index} >
-        <Link to={"/" + task.id}>{task.attributes.description}</Link>
-        <b> | </b>
-        {task.attributes.is_done ? "done" : "not done"}
-        <b> | </b>
-        {task.attributes.due_date}
-        <b> | </b>
-        <button onClick={() => deleteTask(task.id)}>Delete</button>
-      </li>
-    ));
+  const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
+    <li key={index} >
+      <Link to={"/" + task.id}>{task.attributes.description}</Link>
+      <b> | </b>
+      {task.attributes.is_done ? "done" : "not done"}
+      <b> | </b>
+      {task.attributes.due_date}
+      <b> | </b>
+      <button onClick={() => deleteTask(task.id)}>Delete</button>
+    </li>
+  ));
 
   return (
     <div className="home">
