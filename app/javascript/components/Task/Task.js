@@ -31,6 +31,11 @@ const Task = () => {
         <p>Last edited on: {task.attributes.updated_at}</p>
       </div>
 
+      <button onClick={() => {
+        axios.delete('/api/v1/tasks/' + id)
+        setIsInvalidId(true)
+      }}>Delete</button>
+      <b> | </b>
       <Link to={"/"}>Back</Link>
     </div>
   )
