@@ -23,6 +23,11 @@ function filterTaskList(taskList, query) {
     : taskList;
 }
 
+function formatDateTime(dateTime) {
+  var date = new Date(dateTime);
+  return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+}
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -127,7 +132,7 @@ const Tasks = () => {
       <ListItemButton component={Link} to={"/" + task.id}>
         <ListItemText
           primary={task.attributes.description}
-          secondary={"By: " + task.attributes.due_date}
+          secondary={"By: " + formatDateTime(task.attributes.due_date)}
         />
       </ListItemButton>
     </ListItem >
