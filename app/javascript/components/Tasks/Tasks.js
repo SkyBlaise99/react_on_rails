@@ -42,6 +42,7 @@ const Tasks = () => {
   const [showModal, setShowModal] = useState(false)
   const [task, setTask] = useState(null)
   const [descErrMsg, setDescErrMsg] = useState("")
+  const [checked, setChecked] = useState(null)
 
   const fetchData = () => {
     axios.get('/api/v1/tasks/')
@@ -85,9 +86,9 @@ const Tasks = () => {
   const editTask = () => {
     axios.patch('/api/v1/tasks/' + task.id,
       {
-        description: document.getElementById("input_description").value || task.attributes.description,
-        is_done: document.getElementById("input_is_done").checked,
-        due_date: document.getElementById("input_due_date").value || task.attributes.due_date
+        description: document.getElementById("input_description").value,
+        is_done: checked,
+        due_date: document.getElementById("input_due_date").value
       })
       .then(closeModal)
       .catch((error) => setDescErrMsg(error.response.data.error.description))
@@ -132,8 +133,7 @@ const Tasks = () => {
     </ListItem >
   ));
 
-  const showTaskTemplate = task === null
-    ?
+  const showTaskTemplate = task === null ?
     <Box sx={style}>
       <h2>Input Details of New Task</h2>
       {descErrMsg == ""
@@ -153,7 +153,10 @@ const Tasks = () => {
         : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
       <br />
       <label>Is done: </label>
-      <Switch defaultChecked={task.attributes.is_done} />
+      <Switch
+        checked={checked === null ? task.attributes.is_done : checked}
+        onChange={(event) => setChecked(event.target.checked)}
+      />
       <br />
       <TextField id="input_due_date" label="Due date of the task" defaultValue={task.attributes.due_date} />
       <br />
