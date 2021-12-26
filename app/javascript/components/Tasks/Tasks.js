@@ -9,6 +9,7 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 
@@ -158,18 +159,18 @@ const Tasks = () => {
         <p>Your number 1 task manager</p>
       </div>
 
-      <div className="add_task">
-        <button onClick={openAddModal}>Add a new Task</button>
-      </div>
-      <br />
-
-      <div className="search">
+      <div>
         <TextField
           id="tf_search"
           label="Search for your task :)"
+          variant="standard"
           value={searchQuery}
           onChange={handleSearchChange}
         />
+
+        < IconButton onClick={openAddModal}>
+          <AddIcon />
+        </IconButton >
       </div>
 
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
