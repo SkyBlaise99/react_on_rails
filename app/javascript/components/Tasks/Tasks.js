@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 import {
   Checkbox,
+  Fab,
   IconButton,
   List, ListItem, ListItemButton, ListItemText,
   TextField,
@@ -168,9 +169,9 @@ const Tasks = () => {
           onChange={handleSearchChange}
         />
 
-        < IconButton onClick={openAddModal}>
+        <Fab color="primary" onClick={openAddModal}>
           <AddIcon />
-        </IconButton >
+        </Fab>
       </div>
 
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
