@@ -41,6 +41,7 @@ const Tasks = () => {
   const [referesh, setReferesh] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [task, setTask] = useState(null)
+  const [descErrMsg, setDescErrMsg] = useState("")
 
   const fetchData = () => {
     axios.get('/api/v1/tasks/')
@@ -65,16 +66,20 @@ const Tasks = () => {
     setShowModal(true)
   }
 
-  const closeModal = () => { setShowModal(false) }
+  const closeModal = () => {
+    setShowModal(false)
+    setDescErrMsg("")
+  }
 
   const addTask = () => {
     axios.post('/api/v1/tasks/',
       {
-        description: document.getElementById("input_description").value || "Test task",
+        description: document.getElementById("input_description").value,
         is_done: false,
-        due_date: document.getElementById("input_due_date").value || "23:59"
+        due_date: document.getElementById("input_due_date").value
       })
       .then(closeModal)
+      .catch((error) => setDescErrMsg(error.response.data.error.description))
   }
 
   const editTask = () => {
@@ -85,6 +90,7 @@ const Tasks = () => {
         due_date: document.getElementById("input_due_date").value || task.attributes.due_date
       })
       .then(closeModal)
+      .catch((error) => setDescErrMsg(error.response.data.error.description))
   }
 
   const deleteTask = (id) => {
@@ -130,7 +136,9 @@ const Tasks = () => {
     ?
     <Box sx={style}>
       <h2>Input Details of New Task</h2>
-      <TextField id="input_description" label="Description of the task" />
+      {descErrMsg == ""
+        ? <TextField id="input_description" label="Description of the task" />
+        : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
       <br />
       <TextField id="input_due_date" label="Due date of the task" />
       <br />
@@ -140,7 +148,9 @@ const Tasks = () => {
     :
     <Box sx={style}>
       <h2>Edit Details of Task ID {task.id}</h2>
-      <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
+      {descErrMsg == ""
+        ? <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
+        : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
       <br />
       <label>Is done: </label>
       <Switch defaultChecked={task.attributes.is_done} />
