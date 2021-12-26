@@ -75,4 +75,4 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 
 [link](https://mui.com/)
 
-`yarn add @mui/material @emotion/react @emotion/styled`
+`yarn add @mui/material @emotion/react @emotion/styled @mui/icons-material`
