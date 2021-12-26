@@ -9,6 +9,7 @@ import {
   IconButton,
   List, ListItem, ListItemButton, ListItemText,
   Modal,
+  Stack,
   Switch,
   TextField,
   Typography
@@ -30,7 +31,7 @@ function formatDateTime(dateTime) {
 
 const style = {
   position: 'absolute',
-  top: '50%',
+  top: '25%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
@@ -141,32 +142,37 @@ const Tasks = () => {
   const showTaskTemplate = task === null ?
     <Box sx={style}>
       <h2>Input Details of New Task</h2>
-      {descErrMsg == ""
-        ? <TextField id="input_description" label="Description of the task" />
-        : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
-      <br />
-      <TextField id="input_due_date" label="Due date of the task" />
-      <br />
-      <Button onClick={addTask}>Submit</Button>
-      <Button onClick={closeModal}>Close</Button>
+      <Stack spacing={2}>
+        {descErrMsg == ""
+          ? <TextField id="input_description" label="Description of the task" />
+          : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
+        <TextField id="input_due_date" label="Due date of the task" />
+        <Box>
+          <Button onClick={addTask}>Submit</Button>
+          <Button onClick={closeModal}>Close</Button>
+        </Box>
+      </Stack>
     </Box>
     :
     <Box sx={style}>
       <h2>Edit Details of Task ID {task.id}</h2>
-      {descErrMsg == ""
-        ? <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
-        : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
-      <br />
-      <label>Is done: </label>
-      <Switch
-        checked={checked === null ? task.attributes.is_done : checked}
-        onChange={(event) => setChecked(event.target.checked)}
-      />
-      <br />
-      <TextField id="input_due_date" label="Due date of the task" defaultValue={task.attributes.due_date} />
-      <br />
-      <Button onClick={editTask}>Update</Button>
-      <Button onClick={closeModal}>Close</Button>
+      <Stack spacing={2}>
+        {descErrMsg == ""
+          ? <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
+          : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
+        <Box>
+          <label>Is done: </label>
+          <Switch
+            checked={checked === null ? task.attributes.is_done : checked}
+            onChange={(event) => setChecked(event.target.checked)}
+          />
+        </Box>
+        <TextField id="input_due_date" label="Due date of the task" defaultValue={task.attributes.due_date} />
+        <Box>
+          <Button onClick={editTask}>Update</Button>
+          <Button onClick={closeModal}>Close</Button>
+        </Box>
+      </Stack>
     </Box >
 
   return (
