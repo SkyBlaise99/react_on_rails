@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
+import { TextField } from '@mui/material'
 
 function filterTaskList(taskList, query) {
   return query
@@ -67,6 +68,8 @@ const Tasks = () => {
         .then(() => setReferesh(true))
     }
   }
+
+  const handleSearchChange = () => { setSearchQuery(document.getElementById("tf_search").value) }
 
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <li key={index} >
@@ -137,11 +140,11 @@ const Tasks = () => {
       <br />
 
       <div className="search">
-        <input
-          type="text"
-          placeholder="Search for your task :)"
+        <TextField
+          id="tf_search"
+          label="Search for your task :)"
           value={searchQuery}
-          onInput={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearchChange}
         />
       </div>
 
