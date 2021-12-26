@@ -4,7 +4,7 @@ module Api
       protect_from_forgery with: :null_session
 
       def index
-        tasks = Task.all
+        tasks = Task.order(:id).all
         render json: TaskSerializer.new(tasks).serialized_json
       end
 
