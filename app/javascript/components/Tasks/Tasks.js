@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
-import { TextField } from '@mui/material'
+import {
+  Checkbox,
+  IconButton,
+  List, ListItem, ListItemButton, ListItemText,
+  TextField,
+  Typography
+} from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 function filterTaskList(taskList, query) {
   return query
@@ -71,18 +79,34 @@ const Tasks = () => {
 
   const handleSearchChange = () => { setSearchQuery(document.getElementById("tf_search").value) }
 
+  const toggleIsDoneStatus = (task) => {
+    axios.patch('/api/v1/tasks/' + task.id, { is_done: !task.attributes.is_done })
+      .then(() => setReferesh(true))
+  }
+
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
-    <li key={index} >
-      <Link to={"/" + task.id}>{task.attributes.description}</Link>
-      <b> | </b>
-      {task.attributes.is_done ? "done" : "not done"}
-      <b> | </b>
-      {task.attributes.due_date}
-      <b> | </b>
-      <button onClick={() => openEditModal(task)}>Edit</button>
-      <b> | </b>
-      <button onClick={() => deleteTask(task.id)}>Delete</button>
-    </li>
+    <ListItem
+      key={index}
+      secondaryAction={
+        <>
+          <Checkbox checked={task.attributes.is_done} onClick={() => toggleIsDoneStatus(task)} />
+          < IconButton onClick={() => openEditModal(task)}>
+            <EditIcon />
+          </IconButton >
+          < IconButton onClick={() => deleteTask(task.id)}>
+            <DeleteIcon />
+          </IconButton >
+        </>
+      }
+      disablePadding
+    >
+      <ListItemButton component={Link} to={"/" + task.id}>
+        <ListItemText
+          primary={task.attributes.description}
+          secondary={"By: " + task.attributes.due_date}
+        />
+      </ListItemButton>
+    </ListItem >
   ));
 
   const showTaskTemplate = task === null
@@ -148,10 +172,12 @@ const Tasks = () => {
         />
       </div>
 
-      <div className="list">
-        <p>List of Tasks</p>
-        <ul>{formattedTaskList}</ul>
-      </div>
+      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+        Your list of tasks
+      </Typography>
+      <List>
+        {formattedTaskList}
+      </List>
 
       <Modal isOpen={showModal} onRequestClose={closeModal} ariaHideApp={false}>
         {showTaskTemplate}
