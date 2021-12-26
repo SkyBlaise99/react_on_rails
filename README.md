@@ -70,3 +70,9 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 [link](https://github.com/reactjs/react-modal)
 
 `yarn add react-modal`
+
+## Installing MUI
+
+[link](https://mui.com/)
+
+`yarn add @mui/material @emotion/react @emotion/styled`
