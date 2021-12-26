@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import Modal from 'react-modal'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 import {
+  Box,
+  Button,
   Checkbox,
   Fab,
   IconButton,
   List, ListItem, ListItemButton, ListItemText,
+  Modal,
+  Switch,
   TextField,
   Typography
 } from '@mui/material'
@@ -19,6 +22,18 @@ function filterTaskList(taskList, query) {
     ? taskList.filter((task) => task.attributes.description.toLowerCase().includes(query))
     : taskList;
 }
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([])
@@ -113,45 +128,28 @@ const Tasks = () => {
 
   const showTaskTemplate = task === null
     ?
-    <>
+    <Box sx={style}>
       <h2>Input Details of New Task</h2>
-      <p>
-        <label>Description: </label>
-        <input id="input_description" />
-        <br />
-
-        <label>Due date: </label>
-        <input id="input_due_date" />
-      </p>
-      <p>
-        <button onClick={addTask}>Submit</button>
-        <b> | </b>
-        <button onClick={closeModal}>Close</button>
-      </p>
-    </>
+      <TextField id="input_description" label="Description of the task" />
+      <br />
+      <TextField id="input_due_date" label="Due date of the task" />
+      <br />
+      <Button onClick={addTask}>Submit</Button>
+      <Button onClick={closeModal}>Close</Button>
+    </Box>
     :
-    <>
+    <Box sx={style}>
       <h2>Edit Details of Task ID {task.id}</h2>
-      <p>
-        <label>Description: </label>
-        <input id="input_description" defaultValue={task.attributes.description} />
-        <br />
-
-        <label>Is done: </label>
-        {task.attributes.is_done
-          ? <input type="checkbox" id="input_is_done" defaultChecked />
-          : <input type="checkbox" id="input_is_done" />}
-        <br />
-
-        <label>Due date: </label>
-        <input id="input_due_date" defaultValue={task.attributes.due_date} />
-      </p>
-      <p>
-        <button onClick={editTask}>Update</button>
-        <b> | </b>
-        <button onClick={closeModal}>Close</button>
-      </p>
-    </>
+      <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
+      <br />
+      <label>Is done: </label>
+      <Switch defaultChecked={task.attributes.is_done} />
+      <br />
+      <TextField id="input_due_date" label="Due date of the task" defaultValue={task.attributes.due_date} />
+      <br />
+      <Button onClick={editTask}>Update</Button>
+      <Button onClick={closeModal}>Close</Button>
+    </Box >
 
   return (
     <div className="home">
@@ -181,7 +179,7 @@ const Tasks = () => {
         {formattedTaskList}
       </List>
 
-      <Modal isOpen={showModal} onRequestClose={closeModal} ariaHideApp={false}>
+      <Modal open={showModal} onClose={closeModal} >
         {showTaskTemplate}
       </Modal>
     </div>
