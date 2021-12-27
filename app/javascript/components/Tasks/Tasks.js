@@ -70,6 +70,7 @@ const Tasks = () => {
 
   const openEditModal = (task) => {
     setTask(task)
+    setChecked(task.attributes.is_done)
     setShowModal(true)
   }
 
@@ -113,6 +114,8 @@ const Tasks = () => {
     axios.patch('/api/v1/tasks/' + task.id, { is_done: !task.attributes.is_done })
       .then(() => setReferesh(true))
   }
+
+  const handleSetChecked = (event) => { setChecked(event.target.checked) }
 
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <ListItem
@@ -163,8 +166,8 @@ const Tasks = () => {
         <Box>
           <label>Is done: </label>
           <Switch
-            checked={checked === null ? task.attributes.is_done : checked}
-            onChange={(event) => setChecked(event.target.checked)}
+            checked={checked}
+            onChange={handleSetChecked}
           />
         </Box>
         <TextField id="input_due_date" label="Due date of the task" defaultValue={task.attributes.due_date} />
