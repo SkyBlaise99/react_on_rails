@@ -115,7 +115,10 @@ const Tasks = () => {
   const setErrMsg = (error) => {
     const details = error.response.data.error
     if (details.description) setDescErrMsg(details.description)
-    if (details.due_date) setDateErrMsg(details.due_date)
+    if (details.due_date) {
+      if (dueDate) setDateErrMsg("invalid format")
+      else setDateErrMsg(details.due_date)
+    }
   }
 
   const clearErrMsg = () => {
