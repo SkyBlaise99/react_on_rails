@@ -24,7 +24,7 @@ function filterTaskList(taskList, query) {
 
 const style = {
   position: 'absolute',
-  top: '25%',
+  top: '27%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
