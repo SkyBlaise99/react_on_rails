@@ -12,7 +12,9 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 import { format, parseISO } from 'date-fns'
-import { AdapterDateFns, DateTimePicker, LocalizationProvider } from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import DateTimePicker from '@mui/lab/DateTimePicker'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 function filterTaskList(taskList, query) {
   return query
