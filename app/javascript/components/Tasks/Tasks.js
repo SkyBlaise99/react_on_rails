@@ -41,6 +41,7 @@ const Tasks = () => {
   const [showModal, setShowModal] = useState(false)
 
   const [task, setTask] = useState(null)
+  const [description, setDescription] = useState(null)
   const [checked, setChecked] = useState(null)
   const [dueDate, setDueDate] = useState(new Date())
 
@@ -62,12 +63,14 @@ const Tasks = () => {
 
   const openAddModal = () => {
     setTask(null)
+    setDescription("")
     setDueDate(new Date())
     setShowModal(true)
   }
 
   const openEditModal = (task) => {
     setTask(task)
+    setDescription(task.attributes.description)
     setChecked(task.attributes.is_done)
     setDueDate(task.attributes.due_date)
     setShowModal(true)
@@ -82,7 +85,7 @@ const Tasks = () => {
     clearErrMsg()
     axios.post('/api/v1/tasks/',
       {
-        description: document.getElementById("input_description").value,
+        description: description,
         is_done: false,
         due_date: dueDate
       })
@@ -94,7 +97,7 @@ const Tasks = () => {
     clearErrMsg()
     axios.patch('/api/v1/tasks/' + task.id,
       {
-        description: document.getElementById("input_description").value,
+        description: description,
         is_done: checked,
         due_date: dueDate
       })
@@ -127,6 +130,8 @@ const Tasks = () => {
       .then(() => setReferesh(true))
   }
 
+  const handleSetDesc = (event) => { setDescription(event.target.value) }
+
   const handleSetChecked = (event) => { setChecked(event.target.checked) }
 
   const handleSetDueDate = (newValue) => { setDueDate(newValue) }
@@ -156,45 +161,24 @@ const Tasks = () => {
     </ListItem >
   ));
 
-  const showTaskTemplate = task === null ?
+  const showTaskTemplate =
     <Box sx={style}>
-      <h2>Input Details of New Task</h2>
+      <h2>
+        {task === null
+          ? "Input Details of New Task"
+          : "Edit Details of Task ID " + task.id}
+      </h2>
       <Stack spacing={2}>
         {descErrMsg == ""
-          ? <TextField id="input_description" label="Description of the task" />
-          : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateTimePicker
-            label="Due Date"
-            value={dueDate}
-            onChange={handleSetDueDate}
-            renderInput={(params) =>
-              dateErrMsg == ""
-                ? <TextField {...params} />
-                : <TextField {...params} error helperText={dateErrMsg} />
-            }
-          />
-        </LocalizationProvider>
-        <Box>
-          <Button onClick={addTask}>Submit</Button>
-          <Button onClick={closeModal}>Close</Button>
-        </Box>
-      </Stack>
-    </Box>
-    :
-    <Box sx={style}>
-      <h2>Edit Details of Task ID {task.id}</h2>
-      <Stack spacing={2}>
-        {descErrMsg == ""
-          ? <TextField id="input_description" label="Description of the task" defaultValue={task.attributes.description} />
-          : <TextField id="input_description" label="Description of the task" error helperText={descErrMsg} />}
-        <Box>
+          ? <TextField label="Description of the task" value={description} onChange={handleSetDesc} />
+          : <TextField label="Description of the task" value={description} onChange={handleSetDesc} error helperText={descErrMsg} />}
+        {task === null ? <></> : <Box>
           <label>Is done: </label>
           <Switch
             checked={checked}
             onChange={handleSetChecked}
           />
-        </Box>
+        </Box>}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             label="Due Date"
@@ -208,7 +192,9 @@ const Tasks = () => {
           />
         </LocalizationProvider>
         <Box>
-          <Button onClick={editTask}>Update</Button>
+          {task === null
+            ? <Button onClick={addTask}>Submit</Button>
+            : <Button onClick={editTask}>Update</Button>}
           <Button onClick={closeModal}>Close</Button>
         </Box>
       </Stack>
