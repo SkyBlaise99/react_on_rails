@@ -16,12 +16,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
-function filterTaskList(taskList, query) {
-  return query
-    ? taskList.filter((task) => task.attributes.description.toLowerCase().includes(query))
-    : taskList;
-}
-
 const style = {
   position: 'absolute',
   top: '27%',
@@ -33,6 +27,12 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+function filterTaskList(taskList, query) {
+  return query
+    ? taskList.filter((task) => task.attributes.description.toLowerCase().includes(query))
+    : taskList;
+}
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([])
@@ -142,6 +142,7 @@ const Tasks = () => {
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <ListItem
       key={index}
+      disablePadding
       secondaryAction={
         <>
           <Checkbox checked={task.attributes.is_done} onClick={() => toggleIsDoneStatus(task)} />
@@ -153,7 +154,6 @@ const Tasks = () => {
           </IconButton >
         </>
       }
-      disablePadding
     >
       <ListItemButton component={Link} to={"/" + task.id}>
         <ListItemText
