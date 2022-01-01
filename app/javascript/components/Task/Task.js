@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
 import {
-  Box, Button, Checkbox, FormControlLabel, FormGroup, IconButton,
+  Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, IconButton,
   List, ListItem, ListItemText, Modal, Stack, Switch, TextField
 } from '@mui/material'
 
@@ -15,7 +15,15 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
-const style = {
+const style_home = {
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+};
+
+const style_modal = {
   position: 'absolute',
   top: '27%',
   left: '50%',
@@ -109,7 +117,7 @@ const Task = () => {
   const handleSetDueDate = (newValue) => { setDueDate(newValue) }
 
   return (
-    <Box>
+    <Box sx={style_home}>
       <Stack spacing={2}>
         <List>
           <ListItem
@@ -123,31 +131,44 @@ const Task = () => {
                 < IconButton onClick={deleteTask}>
                   <DeleteIcon />
                 </IconButton >
-                <Button href="/">Back</Button>
+                <Button variant="outlined" href="/">Back</Button>
               </>
             }
           >
             <ListItemText
               primary="Details of Task"
+              primaryTypographyProps={{ fontSize: '24px' }}
               secondary={"ID: " + id}
             />
           </ListItem>
         </List>
+
         <TextField label="Description" value={task.description} InputProps={{ readOnly: true }} />
+
         <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={task.is_done} />}
             label="Is done"
             labelPlacement="start"
+            sx={{ justifyContent: "left" }}
           />
         </FormGroup>
-        <TextField label="Due date" value={formatDateTime(task.due_date)} InputProps={{ readOnly: true }} />
-        <TextField label="Created on" value={formatDateTime(task.created_at)} InputProps={{ readOnly: true }} />
-        <TextField label="Last edited on" value={formatDateTime(task.updated_at)} InputProps={{ readOnly: true }} />
+
+        <Grid container direction={"row"} columnSpacing={5}>
+          <Grid item>
+            <TextField InputProps={{ readOnly: true }} label="Due date" value={formatDateTime(task.due_date)} />
+          </Grid>
+          <Grid item>
+            <TextField InputProps={{ readOnly: true }} label="Created on" value={formatDateTime(task.created_at)} />
+          </Grid>
+          <Grid item>
+            <TextField InputProps={{ readOnly: true }} label="Last edited on" value={formatDateTime(task.updated_at)} />
+          </Grid>
+        </Grid>
       </Stack>
 
       <Modal open={showModal} onClose={closeModal} >
-        <Box sx={style}>
+        <Box sx={style_modal}>
           <h2>{"Edit Details of Task ID " + id}</h2>
           <Stack spacing={2}>
             {descErrMsg == ""
@@ -172,9 +193,9 @@ const Task = () => {
                 }
               />
             </LocalizationProvider>
-            <Box>
-              <Button onClick={editTask}>Update</Button>
-              <Button onClick={closeModal}>Close</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 1, m: 1, bgcolor: 'background.paper' }}>
+              <Button onClick={editTask} variant="contained">Update</Button>
+              <Button onClick={closeModal} variant="outlined">Close</Button>
             </Box>
           </Stack>
         </Box>
