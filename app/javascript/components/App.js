@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import Tasks from './Tasks/Tasks'
-import Task from './Task/Task'
+import Tasks from './Tasks'
+import Task from './Task'
 
 const App = () => {
   return (
