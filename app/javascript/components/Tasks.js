@@ -10,13 +10,23 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import GitHubIcon from '@mui/icons-material/GitHub'
 
 import { format, parseISO } from 'date-fns'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
-const style = {
+const style_home = {
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  m: 4,
+};
+
+const style_modal = {
   position: 'absolute',
   top: '27%',
   left: '50%',
@@ -165,7 +175,7 @@ const Tasks = () => {
   ));
 
   const showTaskTemplate =
-    <Box sx={style}>
+    <Box sx={style_modal}>
       <h2>
         {task === null
           ? "Input Details of New Task"
@@ -204,13 +214,33 @@ const Tasks = () => {
     </Box >
 
   return (
-    <div className="home">
-      <div className="header">
-        <h1>Sora</h1>
-        <p>Your number 1 task manager</p>
-      </div>
+    <Box sx={style_home}>
+      <Box>
+        <List>
+          <ListItem
+            key={0}
+            disablePadding
+            secondaryAction={
+              <IconButton href="https://github.com/SkyBlaise99/react_on_rails">
+                <GitHubIcon />
+              </IconButton >
+            }
+          >
+            <ListItemText
+              primary="Sora"
+              primaryTypographyProps={{ fontSize: '48px' }}
+              secondary={"Your number 1 task manager"}
+            />
+          </ListItem>
+        </List>
+      </Box>
 
-      <div>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}>
+        <Typography />
+
         <TextField
           id="tf_search"
           label="Search for your task :)"
@@ -222,9 +252,9 @@ const Tasks = () => {
         <Fab color="primary" onClick={openAddModal}>
           <AddIcon />
         </Fab>
-      </div>
+      </Box>
 
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+      <Typography sx={{ mt: 4 }} variant="h6" component="div">
         Your list of tasks
       </Typography>
       <List>
@@ -234,7 +264,7 @@ const Tasks = () => {
       <Modal open={showModal} onClose={closeModal} >
         {showTaskTemplate}
       </Modal>
-    </div>
+    </Box >
   )
 }
 
