@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import {
   Box, Button, Checkbox, Fab, IconButton, List, ListItem, ListItemButton,
-  ListItemText, Modal, Stack, Switch, TextField, Typography
+  ListItemText, Modal, Paper, Stack, Switch, TextField, Typography
 } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
@@ -19,11 +19,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 const style_home = {
   position: 'absolute',
-  top: '40%',
   left: '50%',
-  transform: 'translate(-50%, -50%)',
+  transform: 'translateX(-50%)',
   width: 800,
-  m: 4,
 };
 
 const style_modal = {
@@ -211,60 +209,64 @@ const Tasks = () => {
           <Button onClick={closeModal}>Close</Button>
         </Box>
       </Stack>
-    </Box >
+    </Box>
 
   return (
-    <Box sx={style_home}>
-      <Box>
-        <List>
-          <ListItem
-            key={0}
-            disablePadding
-            secondaryAction={
-              <IconButton href="https://github.com/SkyBlaise99/react_on_rails">
-                <GitHubIcon />
-              </IconButton >
-            }
-          >
-            <ListItemText
-              primary="Sora"
-              primaryTypographyProps={{ fontSize: '48px' }}
-              secondary={"Your number 1 task manager"}
-            />
-          </ListItem>
-        </List>
+    <Box sx={{ position: 'relative' }}>
+      <Box sx={style_home}>
+        <Box>
+          <List>
+            <ListItem
+              key={0}
+              disablePadding
+              secondaryAction={
+                <IconButton href="https://github.com/SkyBlaise99/react_on_rails">
+                  <GitHubIcon />
+                </IconButton>
+              }
+            >
+              <ListItemText
+                primary="Sora"
+                primaryTypographyProps={{ fontSize: '48px' }}
+                secondary={"Your number 1 task manager"}
+              />
+            </ListItem>
+          </List>
+        </Box>
+
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+          <Typography />
+
+          <TextField
+            id="tf_search"
+            label="Search for your task :)"
+            variant="standard"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+
+          <Fab color="primary" onClick={openAddModal}>
+            <AddIcon />
+          </Fab>
+        </Box>
+
+        <Typography sx={{ mt: 4 }} variant="h6" component="div">
+          Your list of tasks
+        </Typography>
+        <Paper style={{ maxHeight: 450, overflow: 'auto' }}>
+          <List>
+            {formattedTaskList}
+          </List>
+        </Paper>
+
+        <Modal open={showModal} onClose={closeModal}>
+          {showTaskTemplate}
+        </Modal>
       </Box>
-
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}>
-        <Typography />
-
-        <TextField
-          id="tf_search"
-          label="Search for your task :)"
-          variant="standard"
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-
-        <Fab color="primary" onClick={openAddModal}>
-          <AddIcon />
-        </Fab>
-      </Box>
-
-      <Typography sx={{ mt: 4 }} variant="h6" component="div">
-        Your list of tasks
-      </Typography>
-      <List>
-        {formattedTaskList}
-      </List>
-
-      <Modal open={showModal} onClose={closeModal} >
-        {showTaskTemplate}
-      </Modal>
-    </Box >
+    </Box>
   )
 }
 
