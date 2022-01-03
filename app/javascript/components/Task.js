@@ -23,6 +23,13 @@ const style_home = {
   width: 800,
 };
 
+const style_loading = {
+  position: 'absolute',
+  top: '40%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+};
+
 const style_modal = {
   position: 'absolute',
   top: '27%',
@@ -77,7 +84,12 @@ const Task = () => {
 
   if (isInvalidId) return <Navigate to="/" />
 
-  if (task === null) return <h1>Loading ...</h1>
+  if (task === null) return (
+    <Box sx={style_loading}>
+      <h1>Loading ...</h1>
+      <h5>You can try refereshing the page :)</h5>
+    </Box>
+  )
 
   const editTask = () => {
     clearErrMsg()
