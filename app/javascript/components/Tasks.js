@@ -38,9 +38,11 @@ const style_modal = {
 };
 
 function filterTaskList(taskList, query) {
-  return query
-    ? taskList.filter((task) => task.attributes.description.toLowerCase().includes(query))
-    : taskList;
+  if (query == "/d") return taskList.filter((task) => task.attributes.is_done);
+  if (query == "/!d") return taskList.filter((task) => !task.attributes.is_done);
+  if (query == "/" || query == "/!") return taskList;
+  if (query) return taskList.filter((task) => task.attributes.description.toLowerCase().includes(query));
+  return taskList;
 }
 
 const Tasks = () => {
