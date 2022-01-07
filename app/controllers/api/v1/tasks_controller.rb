@@ -52,7 +52,7 @@ module Api
       private
 
       def task_params
-        params.require(:task).permit(:description, :is_done, :due_date)
+        params.require(:task).permit(:description, :is_done, :due_date, :note, :is_pinned)
       end
     end
   end

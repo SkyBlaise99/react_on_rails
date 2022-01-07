@@ -88,3 +88,5 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 `rails g migration AddNoteAndIsPinnedToTasks note:string is_pinned:boolean`
 
 `rails db:migrate`
+
+`task = Task.new( description: "Dummy Assignment", is_done: true, due_date: "23:59", note: "dummy info", is_pinned: true )`
