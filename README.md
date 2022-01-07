@@ -82,3 +82,9 @@ Add `gem 'fast_jsonapi'` to `Gemfile`
 `yarn add date-fns @date-io/date-fns`
 
 `yarn add @mui/lab`
+ 
+ ## Adding new columns
+
+`rails g migration AddNoteAndIsPinnedToTasks note:string is_pinned:boolean`
+
+`rails db:migrate`
