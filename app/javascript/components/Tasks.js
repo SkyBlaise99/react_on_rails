@@ -26,14 +26,15 @@ const style_home = {
 
 const style_modal = {
   position: 'absolute',
-  top: '27%',
+  top: '35%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  px: 4,
+  pb: 1,
 };
 
 function filterTaskList(taskList, query) {
@@ -52,6 +53,7 @@ const Tasks = () => {
   const [description, setDescription] = useState(null)
   const [checked, setChecked] = useState(null)
   const [dueDate, setDueDate] = useState(new Date())
+  const [note, setNote] = useState(null)
 
   const [descErrMsg, setDescErrMsg] = useState("")
   const [dateErrMsg, setDateErrMsg] = useState("")
@@ -73,6 +75,8 @@ const Tasks = () => {
     setTask(null)
     setDescription("")
     setDueDate(new Date())
+    setNote("")
+
     setShowModal(true)
   }
 
@@ -81,6 +85,8 @@ const Tasks = () => {
     setDescription(task.attributes.description)
     setChecked(task.attributes.is_done)
     setDueDate(task.attributes.due_date)
+    setNote(task.attributes.note)
+
     setShowModal(true)
   }
 
@@ -95,7 +101,9 @@ const Tasks = () => {
       {
         description: description,
         is_done: false,
-        due_date: dueDate
+        due_date: dueDate,
+        note: note,
+        is_pinned: false
       })
       .then(closeModal)
       .catch(setErrMsg)
@@ -107,7 +115,8 @@ const Tasks = () => {
       {
         description: description,
         is_done: checked,
-        due_date: dueDate
+        due_date: dueDate,
+        note: note
       })
       .then(closeModal)
       .catch(setErrMsg)
@@ -146,6 +155,8 @@ const Tasks = () => {
   const handleSetChecked = (event) => { setChecked(event.target.checked) }
 
   const handleSetDueDate = (newValue) => { setDueDate(newValue) }
+
+  const handleSetNote = (event) => { setNote(event.target.value) }
 
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <ListItem
@@ -202,6 +213,7 @@ const Tasks = () => {
             }
           />
         </LocalizationProvider>
+        <TextField label="Note for the task" value={note} onChange={handleSetNote} multiline maxRows={3} />
         <Box>
           {task === null
             ? <Button onClick={addTask}>Submit</Button>

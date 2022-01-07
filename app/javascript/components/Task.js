@@ -17,7 +17,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 const style_home = {
   position: 'absolute',
-  top: '40%',
+  top: '45%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 800,
@@ -32,14 +32,15 @@ const style_loading = {
 
 const style_modal = {
   position: 'absolute',
-  top: '27%',
+  top: '35%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  px: 4,
+  pb: 1,
 };
 
 function formatDateTime(dateTime) {
@@ -56,6 +57,7 @@ const Task = () => {
   const [description, setDescription] = useState(null)
   const [checked, setChecked] = useState(null)
   const [dueDate, setDueDate] = useState(null)
+  const [note, setNote] = useState(null)
 
   const [descErrMsg, setDescErrMsg] = useState("")
   const [dateErrMsg, setDateErrMsg] = useState("")
@@ -70,6 +72,8 @@ const Task = () => {
     setDescription(task.description)
     setChecked(task.is_done)
     setDueDate(task.due_date)
+    setNote(task.note)
+
     setShowModal(true)
   }
 
@@ -97,7 +101,8 @@ const Task = () => {
       {
         description: description,
         is_done: checked,
-        due_date: dueDate
+        due_date: dueDate,
+        note: note
       })
       .then(closeModal)
       .catch((error) => {
@@ -127,6 +132,8 @@ const Task = () => {
   const handleSetChecked = (event) => { setChecked(event.target.checked) }
 
   const handleSetDueDate = (newValue) => { setDueDate(newValue) }
+
+  const handleSetNote = (event) => { setNote(event.target.value) }
 
   return (
     <Box sx={style_home}>
@@ -177,6 +184,8 @@ const Task = () => {
             <TextField InputProps={{ readOnly: true }} label="Last edited on" value={formatDateTime(task.updated_at)} />
           </Grid>
         </Grid>
+
+        <TextField label="Note" value={task.note} InputProps={{ readOnly: true }} multiline maxRows={5} />
       </Stack>
 
       <Modal open={showModal} onClose={closeModal} >
@@ -205,6 +214,7 @@ const Task = () => {
                 }
               />
             </LocalizationProvider>
+            <TextField label="Note for the task" value={note} onChange={handleSetNote} multiline maxRows={3} />
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 1, m: 1, bgcolor: 'background.paper' }}>
               <Button onClick={editTask} variant="contained">Update</Button>
               <Button onClick={closeModal} variant="outlined">Close</Button>
