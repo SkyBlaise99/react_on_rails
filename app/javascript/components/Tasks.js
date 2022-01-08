@@ -4,8 +4,8 @@ import axios from 'axios'
 
 import {
   Box, Button, Checkbox, Fab, IconButton, List, ListItem, ListItemButton,
-  ListItemIcon, ListItemText, Modal, Paper, Stack, Switch, TextField,
-  Typography
+  ListItemIcon, ListItemText, Menu, MenuItem, Modal, Paper, Stack, Switch,
+  TextField, Typography
 } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import PushPinIcon from '@mui/icons-material/PushPin'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import { format, parseISO } from 'date-fns'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -66,6 +67,9 @@ const Tasks = () => {
 
   const [descErrMsg, setDescErrMsg] = useState("")
   const [dateErrMsg, setDateErrMsg] = useState("")
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
 
   const fetchData = () => {
     axios.get('/api/v1/tasks/')
@@ -127,14 +131,20 @@ const Tasks = () => {
         due_date: dueDate,
         note: note
       })
-      .then(closeModal)
+      .then(() => {
+        closeModal()
+        setAnchorEl(null)
+      })
       .catch(setErrMsg)
   }
 
   const deleteTask = (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       axios.delete('/api/v1/tasks/' + id)
-        .then(() => setReferesh(true))
+        .then(() => {
+          setAnchorEl(null)
+          setReferesh(true)
+        })
     }
   }
 
@@ -167,6 +177,10 @@ const Tasks = () => {
 
   const handleSetNote = (event) => { setNote(event.target.value) }
 
+  const handleShowMenu = (event) => { setAnchorEl(event.currentTarget) }
+
+  const handleCloseMenu = () => { setAnchorEl(null) }
+
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <ListItem
       key={index}
@@ -174,12 +188,21 @@ const Tasks = () => {
       secondaryAction={
         <>
           <Checkbox checked={task.attributes.is_done} onClick={() => toggleIsDoneStatus(task)} />
-          <IconButton onClick={() => openEditModal(task)}>
-            <EditIcon />
+          <IconButton onClick={handleShowMenu}>
+            <MoreVertIcon />
           </IconButton>
-          <IconButton onClick={() => deleteTask(task.id)}>
-            <DeleteIcon />
-          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem key="edit" onClick={() => openEditModal(task)}>
+              <EditIcon />
+            </MenuItem>
+            <MenuItem key="delete" onClick={() => deleteTask(task.id)}>
+              <DeleteIcon />
+            </MenuItem>
+          </Menu>
         </>
       }
     >
