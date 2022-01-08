@@ -174,12 +174,12 @@ const Tasks = () => {
       secondaryAction={
         <>
           <Checkbox checked={task.attributes.is_done} onClick={() => toggleIsDoneStatus(task)} />
-          < IconButton onClick={() => openEditModal(task)}>
+          <IconButton onClick={() => openEditModal(task)}>
             <EditIcon />
-          </IconButton >
-          < IconButton onClick={() => deleteTask(task.id)}>
+          </IconButton>
+          <IconButton onClick={() => deleteTask(task.id)}>
             <DeleteIcon />
-          </IconButton >
+          </IconButton>
         </>
       }
     >
