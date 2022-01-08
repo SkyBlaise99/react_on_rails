@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import PushPinIcon from '@mui/icons-material/PushPin'
+import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import { format, parseISO } from 'date-fns'
@@ -133,7 +134,7 @@ const Tasks = () => {
       })
       .then(() => {
         closeModal()
-        setAnchorEl(null)
+        handleCloseMenu()
       })
       .catch(setErrMsg)
   }
@@ -142,7 +143,7 @@ const Tasks = () => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       axios.delete('/api/v1/tasks/' + id)
         .then(() => {
-          setAnchorEl(null)
+          handleCloseMenu()
           setReferesh(true)
         })
     }
@@ -169,6 +170,14 @@ const Tasks = () => {
       .then(() => setReferesh(true))
   }
 
+  const toggleIsPinnedStatus = (task) => {
+    axios.patch('/api/v1/tasks/' + task.id, { is_pinned: !task.attributes.is_pinned })
+      .then(() => {
+        handleCloseMenu()
+        setReferesh(true)
+      })
+  }
+
   const handleSetDesc = (event) => { setDescription(event.target.value) }
 
   const handleSetChecked = (event) => { setChecked(event.target.checked) }
@@ -177,9 +186,15 @@ const Tasks = () => {
 
   const handleSetNote = (event) => { setNote(event.target.value) }
 
-  const handleShowMenu = (event) => { setAnchorEl(event.currentTarget) }
+  const handleShowMenu = (event, task) => {
+    setTask(task)
+    setAnchorEl(event.currentTarget)
+  }
 
-  const handleCloseMenu = () => { setAnchorEl(null) }
+  const handleCloseMenu = () => {
+    setTask(null)
+    setAnchorEl(null)
+  }
 
   const formattedTaskList = filterTaskList(tasks, searchQuery).map((task, index) => (
     <ListItem
@@ -188,27 +203,9 @@ const Tasks = () => {
       secondaryAction={
         <>
           <Checkbox checked={task.attributes.is_done} onClick={() => toggleIsDoneStatus(task)} />
-          <IconButton onClick={handleShowMenu}>
+          <IconButton onClick={(event) => handleShowMenu(event, task)}>
             <MoreVertIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleCloseMenu}
-          >
-            <MenuItem key="edit" onClick={() => openEditModal(task)}>
-              <EditIcon />
-              <Typography sx={{ ml: 1 }}>
-                Edit task details
-              </Typography>
-            </MenuItem>
-            <MenuItem key="delete" onClick={() => deleteTask(task.id)}>
-              <DeleteIcon />
-              <Typography sx={{ ml: 1 }}>
-                Delete this task
-              </Typography>
-            </MenuItem>
-          </Menu>
         </>
       }
     >
@@ -317,6 +314,48 @@ const Tasks = () => {
           <List>
             {formattedTaskList}
           </List>
+          {
+            task
+              ?
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem key="edit" onClick={() => openEditModal(task)}>
+                  <EditIcon />
+                  <Typography sx={{ ml: 1 }}>
+                    Edit task details
+                  </Typography>
+                </MenuItem>
+                <MenuItem key="delete" onClick={() => deleteTask(task.id)}>
+                  <DeleteIcon />
+                  <Typography sx={{ ml: 1 }}>
+                    Delete this task
+                  </Typography>
+                </MenuItem>
+                <MenuItem key="pin" onClick={() => toggleIsPinnedStatus(task)}>
+                  {
+                    task.attributes.is_pinned
+                      ?
+                      <>
+                        <PushPinOutlinedIcon />
+                        <Typography sx={{ ml: 1 }}>
+                          Unpin this task
+                        </Typography>
+                      </>
+                      :
+                      <>
+                        <PushPinIcon />
+                        <Typography sx={{ ml: 1 }}>
+                          Pin this task
+                        </Typography>
+                      </>
+                  }
+                </MenuItem>
+              </Menu>
+              : <></>
+          }
         </Paper>
 
         <Modal open={showModal} onClose={closeModal}>
