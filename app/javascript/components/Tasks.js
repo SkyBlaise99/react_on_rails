@@ -4,13 +4,15 @@ import axios from 'axios'
 
 import {
   Box, Button, Checkbox, Fab, IconButton, List, ListItem, ListItemButton,
-  ListItemText, Modal, Paper, Stack, Switch, TextField, Typography
+  ListItemIcon, ListItemText, Modal, Paper, Stack, Switch, TextField,
+  Typography
 } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import GitHubIcon from '@mui/icons-material/GitHub'
+import PushPinIcon from '@mui/icons-material/PushPin'
 
 import { format, parseISO } from 'date-fns'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -177,6 +179,13 @@ const Tasks = () => {
       }
     >
       <ListItemButton component={Link} to={"/" + task.id}>
+        <ListItemIcon sx={{ minWidth: 40 }}>
+          {
+            task.attributes.is_pinned
+              ? <PushPinIcon />
+              : <></>
+          }
+        </ListItemIcon>
         <ListItemText
           primary={task.attributes.description}
           secondary={"By: " + format(parseISO(task.attributes.due_date), 'MMM dd, yyyy hh:mm a')}
