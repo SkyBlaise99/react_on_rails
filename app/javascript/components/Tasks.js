@@ -198,9 +198,15 @@ const Tasks = () => {
           >
             <MenuItem key="edit" onClick={() => openEditModal(task)}>
               <EditIcon />
+              <Typography sx={{ ml: 1 }}>
+                Edit task details
+              </Typography>
             </MenuItem>
             <MenuItem key="delete" onClick={() => deleteTask(task.id)}>
               <DeleteIcon />
+              <Typography sx={{ ml: 1 }}>
+                Delete this task
+              </Typography>
             </MenuItem>
           </Menu>
         </>
